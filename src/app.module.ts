@@ -8,17 +8,18 @@ import { BillsController } from './bills/bills.controller';
 import { BillsService } from './bills/bills.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
-
-const DB_URI = new ConfigService(path.resolve(__dirname + '/config/.env')).get(
-  'DB_URI',
-);
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(DB_URI, {
-      useNewUrlParser: true,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('DB_URI'),
+        useNewUrlParser: true,
+      }),
+      inject: [ConfigService],
     }),
-    ConfigModule,
   ],
   controllers: [AppController, BillsController],
   providers: [AppService, BillsService],
