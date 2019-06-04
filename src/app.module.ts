@@ -9,11 +9,12 @@ import { BillsService } from './bills/bills.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { async } from 'rxjs/internal/scheduler/async';
+import { BillsModule } from './bills/bills.module';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [BillsModule, ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get('DB_URI'),
         useNewUrlParser: true,
@@ -21,7 +22,7 @@ import { async } from 'rxjs/internal/scheduler/async';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AppController, BillsController],
-  providers: [AppService, BillsService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

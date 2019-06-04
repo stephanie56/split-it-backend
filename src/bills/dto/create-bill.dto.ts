@@ -1,6 +1,4 @@
-import { Document } from 'mongoose';
-
-export interface Bill extends Document {
+export class CreateBillDto {
   readonly name: string;
   readonly description: string;
   readonly billAmount: number;
